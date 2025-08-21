@@ -1,0 +1,3 @@
+- niveau de difficultés = nouveau context qui changerai les stats de depart, la quantité de points perdus par tick, augmenter/diminuer les chances/risques d'events, changer les cooldowns des différentes action
+
+- Mettre des cooldown aux différentes actions : useEffect aux fonctions d'actions  
