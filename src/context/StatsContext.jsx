@@ -1,29 +1,45 @@
-import { useEffect, useState, createContext, useContext } from "react";
+import { useEffect, useState, createContext, useContext, useRef } from "react";
+import { useNavigate } from "react-router";
 
 const StatsContext = createContext();
 
 export default function StatsProvider({ children }) {
+  const navigate = useNavigate();
+
+  // Init des etats + stats de base
   const [energy, setEnergy] = useState(100);
   const [mood, setMood] = useState(100);
   const [money, setMoney] = useState(50);
+  const [event, setEvent] = useState(null); // événement en cours
+  const [isGameOver, setIsGameOver] = useState(false); // creer un etat gameover ou non, pour eviter de restart 2 fois car au restart
+
+  // Ref pour stocker l'interval pour pouvoir y acceder partout notemment dans stopLosses
+  const lossesIntervalRef = useRef(null);
 
   // Perte par seconde
-  useEffect(() => {
-    const lossesInterval = setInterval(() => {
+  function startLosses() {
+    if (lossesIntervalRef.current) return; // si déjà lancé, on ne recrée pas un interval
+
+    lossesIntervalRef.current = setInterval(() => {
       setEnergy((prev) => Math.max(prev - 5, 0));
-      /* prev permet de recuperer la valeur precedente d'energy. 
+      setMood((prev) => Math.max(prev - 5, 0));
+    }, 10000); // toutes les 10 secondes
+  }
+  /* prev permet de recuperer la valeur precedente d'energy. 
       Si pas prev, et que je perd -5 puis je travaill donc - 30 , il ne fera que moins -30, et je perd un tick
       Donc utiliser prev (partout) plutot que de mettre energy(prev) directement 
-      puis Math.max compare "prev -5" et  "0" pour prendre le plus grand des 2 */
-      setMood((prev) => Math.max(prev - 5, 0));
-    }, 10000); // toute les 10 secondes
+      puis Math.max compare "prev -5" et  "0" pour prendre le plus grand des 2  pour eviter de passer en dessous de 0*/
 
-    return () => clearInterval(lossesInterval); // cleanup : fonction integrée, evite les fuites de mémoires
-  }, []);
+  function stopLosses() {
+    if (lossesIntervalRef.current) {
+      clearInterval(lossesIntervalRef.current);
+      lossesIntervalRef.current = null;
+    }
+  }
 
   // Actions du jeu
   function eat() {
-    setEnergy((prev) => Math.min(prev + 20, 100));
+    setEnergy((prev) => Math.min(prev + 20, 100)); // math min 100 evite de passer au dessus de 100
     setMood((prev) => Math.max(prev - 5, 0));
     setMoney((prev) => Math.max(prev - 10, 0));
   }
@@ -36,7 +52,7 @@ export default function StatsProvider({ children }) {
   function work() {
     setEnergy((prev) => Math.max(prev - 30, 0));
     setMood((prev) => Math.max(prev - 10, 0));
-    setMoney((prev) => prev + 40);
+    setMoney((prev) => Math.min(prev + 40, 100));
   }
 
   function play() {
@@ -45,16 +61,60 @@ export default function StatsProvider({ children }) {
     setMoney((prev) => Math.max(prev - 20, 0));
   }
 
+  // Liste des événements
+  const events = [
+    {
+      message: "Vous trouvez un billet de 20€ par terre !",
+      effect: () => setMoney((prev) => Math.max(prev + 20), 100),
+    },
+    {
+      message: "Vous avez oublié de payer votre loyer…",
+      effect: () => setMoney((prev) => Math.max(prev - 30, 0)),
+    },
+    {
+      message: "Un ami vous invite au cinéma gratuitement !",
+      effect: () => setMood((prev) => Math.max(prev + 10, 100)),
+    },
+    {
+      message: "Vous tombez malade…",
+      effect: () => setEnergy((prev) => Math.max(prev - 15, 0)),
+    },
+  ];
+
+  // Game Over
+  useEffect(() => {
+    if (!isGameOver && (energy <= 0 || mood <= 0 || money <= 0)) {
+      stopLosses();
+      setIsGameOver(true);
+      navigate("/GameOver");
+    }
+  }, [energy, mood, money, navigate, isGameOver]);
+
+  // Reset des stats après un gameOver
+  function resetStats() {
+    setEnergy(100);
+    setMood(100);
+    setMoney(50);
+    setIsGameOver(false);
+  }
+
   return (
     <StatsContext.Provider
       value={{
         energy,
         mood,
         money,
+        lossesIntervalRef,
+        setEnergy,
+        setMood,
+        setMoney,
         eat,
         sleep,
         work,
         play,
+        resetStats,
+        startLosses,
+        stopLosses,
       }}
     >
       {children}
@@ -66,9 +126,24 @@ export function useStats() {
   return useContext(StatsContext);
 }
 
-/* 
-Action 	     ⚡ Énergie 😊 Humeur	 💰 Argent
-Travailler 	🔻 -30	    🔻 -10	  🔺 +40
-Dormir 	    🔺 +50	    🔻 -5	0     0
-S’amuser 	  🔻 -10	    🔺 +30	  🔻 -20
-Manger 	    🔺 +20	    🔻 -5	    🔻 -10*/
+/*  
+// Tirage aléatoire toutes les 30-60s
+  useEffect(() => {
+    if (lossesIntervalRef.current) {
+      const triggerRandomEvent = () => {
+        const randomEvent = events[Math.floor(Math.random() * events.length)];
+        setEvent(randomEvent);
+        randomEvent.effect(); // appliquer effet
+      };
+
+      const interval = setInterval(() => {
+        triggerRandomEvent();
+      }, Math.random() * (6000 - 3000) + 3000); // entre 30 et 60s
+
+      return () => clearInterval(interval);
+    }
+  }, []);
+
+  // disparition après 15s
+      setTimeout(() => setEvent(null), 15000);
+*/

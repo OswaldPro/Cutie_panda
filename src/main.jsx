@@ -7,10 +7,10 @@ import StatsProvider from "./context/StatsContext.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <StatsProvider>
-      <BrowserRouter>
+    <BrowserRouter>
+      <StatsProvider>
         <App />
-      </BrowserRouter>
-    </StatsProvider>
+      </StatsProvider>
+    </BrowserRouter>
   </StrictMode>
 );

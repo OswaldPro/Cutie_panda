@@ -20,6 +20,7 @@ export default function StatsDisplay() {
       <div
         style={{
           background: "#EEEADE",
+          border: "1px solid #758478",
           borderRadius: "8px",
           overflow: "hidden",
           height: "27px",

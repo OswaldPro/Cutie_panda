@@ -1,7 +1,9 @@
-import PrimaryBtn from "../buttons/primaryBtn";
+import StartBtn from "../buttons/StartBtn";
 import Header from "../header/header";
 
 export default function HomePage() {
+  console.log("Page chargé");
+
   return (
     <div className="home-page-wrapper">
       <Header></Header>
@@ -14,7 +16,7 @@ export default function HomePage() {
         vie, nourris le , fais le travailler, dormir et jouer, en évitant les
         embûches, <span className="bold-inter">prêt ?</span>
       </p>
-      <PrimaryBtn to="/MainPage">Jouer</PrimaryBtn>
+      <StartBtn>Jouer</StartBtn>
     </div>
   );
 }
