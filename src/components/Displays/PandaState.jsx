@@ -27,7 +27,7 @@ export default function PandaState() {
   }
 
   return (
-    <div>
+    <div className="panda-state">
       <img src={PandaImg} alt="État du panda" />
     </div>
   );

@@ -10,7 +10,7 @@ export default function StatsProvider({ children }) {
   const [energy, setEnergy] = useState(100);
   const [mood, setMood] = useState(100);
   const [money, setMoney] = useState(50);
-  const [event, setEvent] = useState(null); // événement en cours
+
   const [isGameOver, setIsGameOver] = useState(false); // creer un etat gameover ou non, pour eviter de restart 2 fois car au restart
 
   // Ref pour stocker l'interval pour pouvoir y acceder partout notemment dans stopLosses
@@ -23,7 +23,7 @@ export default function StatsProvider({ children }) {
     lossesIntervalRef.current = setInterval(() => {
       setEnergy((prev) => Math.max(prev - 5, 0));
       setMood((prev) => Math.max(prev - 5, 0));
-    }, 10000); // toutes les 10 secondes
+    }, 1000000); // toutes les 10 secondes
   }
   /* prev permet de recuperer la valeur precedente d'energy. 
       Si pas prev, et que je perd -5 puis je travaill donc - 30 , il ne fera que moins -30, et je perd un tick
@@ -60,26 +60,6 @@ export default function StatsProvider({ children }) {
     setMood((prev) => Math.min(prev + 30, 100));
     setMoney((prev) => Math.max(prev - 20, 0));
   }
-
-  // Liste des événements
-  const events = [
-    {
-      message: "Vous trouvez un billet de 20€ par terre !",
-      effect: () => setMoney((prev) => Math.max(prev + 20), 100),
-    },
-    {
-      message: "Vous avez oublié de payer votre loyer…",
-      effect: () => setMoney((prev) => Math.max(prev - 30, 0)),
-    },
-    {
-      message: "Un ami vous invite au cinéma gratuitement !",
-      effect: () => setMood((prev) => Math.max(prev + 10, 100)),
-    },
-    {
-      message: "Vous tombez malade…",
-      effect: () => setEnergy((prev) => Math.max(prev - 15, 0)),
-    },
-  ];
 
   // Game Over
   useEffect(() => {
@@ -125,25 +105,3 @@ export default function StatsProvider({ children }) {
 export function useStats() {
   return useContext(StatsContext);
 }
-
-/*  
-// Tirage aléatoire toutes les 30-60s
-  useEffect(() => {
-    if (lossesIntervalRef.current) {
-      const triggerRandomEvent = () => {
-        const randomEvent = events[Math.floor(Math.random() * events.length)];
-        setEvent(randomEvent);
-        randomEvent.effect(); // appliquer effet
-      };
-
-      const interval = setInterval(() => {
-        triggerRandomEvent();
-      }, Math.random() * (6000 - 3000) + 3000); // entre 30 et 60s
-
-      return () => clearInterval(interval);
-    }
-  }, []);
-
-  // disparition après 15s
-      setTimeout(() => setEvent(null), 15000);
-*/

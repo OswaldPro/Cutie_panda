@@ -1,4 +1,5 @@
 import { useStats } from "../../context/StatsContext";
+import { motion } from "framer-motion";
 
 export default function StatsDisplay() {
   const { energy, mood, money } = useStats();
@@ -6,7 +7,7 @@ export default function StatsDisplay() {
   function StatBar({ value, max = 100 }) {
     // on definit qu'une barre plein est a 100
     // Definir le % de remplissage des bar en fonction de la maximum
-    const percent = Math.min((value / max) * 100, 100); // prends la plus petite valeur des 2, pour ne pas depasser les 100 inutilement
+    const percent = Math.round((value / max) * 100); // prends la plus petite valeur des 2, pour ne pas depasser les 100 inutilement
 
     // Couleur en fonction de la stat
     let barColor = "#758478"; // par défaut
@@ -27,12 +28,16 @@ export default function StatsDisplay() {
           width: "300px",
         }}
       >
-        <div
+        <motion.div
           style={{
-            width: `${percent}%`,
             height: "100%",
             background: barColor,
-            transition: "width 1s ease",
+            width: `${percent}%`,
+          }}
+          animate={{ width: `${percent}%` }}
+          transition={{
+            duration: 0.5,
+            ease: "easeOut",
           }}
         />
       </div>
@@ -40,7 +45,7 @@ export default function StatsDisplay() {
   }
 
   return (
-    <div>
+    <div className="bars-wrapper">
       <StatBar value={mood} />
       <StatBar value={energy} />
       <StatBar value={money} />

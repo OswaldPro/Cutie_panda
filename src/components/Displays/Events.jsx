@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useStats } from "../../context/StatsContext";
+import { motion } from "motion/react";
 
 export default function Events() {
   const { setEnergy, setMood, setMoney, lossesIntervalRef } = useStats();
@@ -35,7 +36,7 @@ export default function Events() {
       randomEvent.effect(); // appliquer effet
 
       // disparition après 8s
-      setTimeout(() => setEvent(null), 5000);
+      setTimeout(() => setEvent(null), 7000);
     };
 
     const interval = setInterval(() => {
@@ -46,10 +47,23 @@ export default function Events() {
   }, [lossesIntervalRef.current]); // dépendance : relance si le jeu démarre
 
   if (!event) return null;
-
   return (
-    <div className="event-popup">
-      <p>{event.message}</p>
-    </div>
+    <motion.div
+      className="event-popup"
+      initial={{ scale: 0 }}
+      animate={{ scale: 1 }}
+      transition={{
+        duration: 1,
+        scale: { type: "spring", visualDuration: 0.5, bounce: 0.5 },
+      }}
+    >
+      <motion.p
+        initial={{ opacity: 1, y: 0 }}
+        animate={{ opacity: 0, y: 150 }}
+        transition={{ delay: 5, duration: 1 }}
+      >
+        {event.message}
+      </motion.p>
+    </motion.div>
   );
 }

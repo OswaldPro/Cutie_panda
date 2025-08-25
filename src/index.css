@@ -49,6 +49,126 @@ h1 {
   font-weight: bold;
 }
 
+/* Header */
+
+.header-wrapper {
+  width: 100%;
+  height: 12vh;
+  display: flex;
+  align-items: end; 
+
+  .banner {
+    width: 100%;   
+    
+    h1 {
+      width: 100%;
+      height: 2.2em;
+      background-color: #758478;
+      color: #FFF;
+      padding:  1.1rem 3rem;
+    }
+  }
+}
+
+/* Home page  */
+
+.home-page-wrapper {
+  width: 100%;
+  height: 88vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 50px;
+  padding: 6rem 0;
+
+  p {
+    width: 72%;
+    text-align: center;
+  }
+}
+
+/* Main page */
+.main-page-wrapper {
+  width: 100%;
+  height: 75vh;
+
+  .panda-hero {
+    width: 100%;
+    height: 39%;
+    margin-top: 2rem;
+    background-image: url(/public/images/bambous.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+
+    .panda-state {
+      width: 64%;
+      aspect-ratio: 1/1;
+      margin: auto;
+    }
+  }
+}
+
+.stats-wrapper{
+  width: 90%;
+  margin: auto;
+  display: flex;
+  gap: 5px;
+
+  .stats-icons{
+    width: 8.5%;
+    display: flex;
+    flex-direction: column;
+    color: #758478;
+  }
+  .stats-bars {
+    display: flex;
+  justify-content: center;
+
+    .bars-wrapper {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 6px;
+    }
+  }
+}
+
+.action-btns-wrapper {
+  width: 68.2%;
+  margin: 3.3rem auto;
+
+  .action-btn-flex {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap : 1.8rem;
+  }
+}
+
+.events-wrapper {
+  width: 100%;
+  height: 11vh;
+}
+
+/* Game over page */
+
+.gameover-page-wrapper {
+  width: 100%;
+  height: 88vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 50px;
+  padding: 6rem 0;
+
+  p {
+    width: 72%;
+    text-align: center;
+  }
+}
+
 
 /* Components: Btn */
 .prim-btn {
@@ -60,9 +180,29 @@ h1 {
   color: #FFF;
 }
 
-/* Components: Bars */
+.action-btn  {
+  width: 46%;
+  border-radius: 8px;
+  background-color: #758478;
+  font-family: 'Inter-Bold';
+  font-weight: bold;
+  text-align: center;
+  padding: 1.7em 1.4em;
+  color: #FFF;
+}
 
-/* Components: Icons bars */
+/* Components: Events */
+
+.event-popup{
+  width: 250px;
+  margin: auto;
+}
+
+
+
+
 /* Components: Btn */
 /* Components: Btn */
 /* Components: Btn */
+
+

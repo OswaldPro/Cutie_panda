@@ -22,14 +22,16 @@ export default function HomePage() {
   };
 
   return (
-    <div className="gameover-page-wrapper">
+    <>
       <Header></Header>
-      <img
-        src="/images/game-over.png"
-        alt="Cartoon illustration of a smiling panda arms opened, closed eyes with a yellow luminous halo over is head. The background is plain white."
-      />
-      <p>{message}</p>
-      <ReStartBtn onClick={handleRestart}>Rejouer</ReStartBtn>
-    </div>
+      <div className="gameover-page-wrapper">
+        <img
+          src="/images/game-over.png"
+          alt="Cartoon illustration of a smiling panda arms opened, closed eyes with a yellow luminous halo over is head. The background is plain white."
+        />
+        <p>{message}</p>
+        <ReStartBtn onClick={handleRestart}>Rejouer</ReStartBtn>
+      </div>
+    </>
   );
 }
